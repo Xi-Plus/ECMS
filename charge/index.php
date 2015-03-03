@@ -78,11 +78,15 @@ meta();
 		<?php
 		$date=date("Y-m-d");
 		if($_GET["date"]!="")$date=$_GET["date"];
+		$previousdate=mfa(SELECT(array("MAX(`date`) AS `temp`"),"record",array(array("date",$date,"<"))));
+		$nextdate=mfa(SELECT(array("MIN(`date`) AS `temp`"),"record",array(array("date",$date,">"))));
 		?>
 		Date
 		<hr>
 		<form action="" method="get" id="form">
 			<input name="date" type="date" value="<?php echo $date; ?>"><br>
+			<input type="button" value="Previous" onClick="date.value='<?php echo $previousdate["temp"];?>;form.submit();'"<?php echo ($previousdate["temp"]==NULL?" disabled":""); ?>>
+			<input type="button" value="Next" onClick="date.value='<?php echo $nextdate["temp"];?>;form.submit();'"<?php echo ($nextdate["temp"]==NULL?" disabled":""); ?>>
 			<input name="" type="submit" value="Search">
 		</form>
 		Add

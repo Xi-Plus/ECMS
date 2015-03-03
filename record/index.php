@@ -43,15 +43,21 @@ include_once("../res/header.php");
 		<br>
 		Date
 		<hr>
-		<input name="date" type="date" value="<?php echo ($_GET["date"]==""?date("Y-m-d"):$_GET["date"]); ?>"><br>
+		<?php
+		$date=date("Y-m-d");
+		if($_GET["date"]!="")$date=$_GET["date"];
+		$previousdate=mfa(SELECT(array("MAX(`date`) AS `temp`"),"record",array(array("date",$date,"<"))));
+		$nextdate=mfa(SELECT(array("MIN(`date`) AS `temp`"),"record",array(array("date",$date,">"))));
+		?>
+		<input name="date" type="date" id="date" value="<?php echo $date; ?>"><br>
+		<input type="button" value="Previous" onClick="date.value='<?php echo $previousdate["temp"];?>;form.submit();'"<?php echo ($previousdate["temp"]==NULL?" disabled":""); ?>>
+		<input type="button" value="Next" onClick="date.value='<?php echo $nextdate["temp"];?>;form.submit();'"<?php echo ($nextdate["temp"]==NULL?" disabled":""); ?>>
 		<input name="" type="submit" value="Search">
 		</form>
 	</td>
 	<td width="300" valign="top">
 		Date:
 		<?php
-		$date=date("Y-m-d");
-		if($_GET["date"]!="")$date=$_GET["date"];
 		echo $date;
 		?>
 		<hr>
